@@ -1,153 +1,173 @@
 <!DOCTYPE html>
-<html lang="ka">
+<html lang="ka" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emerald - ლუქს კლასის სასტუმრო</title>
-    <!-- Tailwind CSS სტილებისთვის და ანიმაციებისთვის -->
+    <title>Emerald - Luxury Hotel</title>
+    
+    <!-- Tailwind CSS და Fira GO შრიფტი -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+GO:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS ბიბლიოთეკა ანიმაციებისთვის -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Fira GO', sans-serif;
-            background-color: #0b0f19;
+            background-color: #05070f;
             color: #ffffff;
-            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
         .hero-bg {
-            background-image: linear-gradient(rgba(11, 15, 25, 0.7), rgba(11, 15, 25, 0.9)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1920');
+            background-image: linear-gradient(rgba(5, 7, 15, 0.4), rgba(5, 7, 15, 0.95)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1920');
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(52, 211, 153, 0.4); }
+            50% { text-shadow: 0 0 25px rgba(52, 211, 153, 0.9); }
+        }
+        .neon-glow {
+            animation: pulseGlow 3s infinite;
         }
     </style>
 </head>
 
-<body>
+<body class="selection:bg-emerald-500 selection:text-black">
 
     <!-- ნავიგაცია (Navbar) -->
-    <nav class="border-b border-gray-800 bg-[#0b0f19]/90 backdrop-blur-md sticky top-0 z-50">
+    <nav class="border-b border-emerald-500/10 bg-[#05070f]/80 backdrop-blur-xl sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold tracking-wider text-emerald-400">EMERALD</a>
-            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest text-gray-300">
-                <a href="#" class="hover:text-emerald-400 transition">მთავარი</a>
-                <a href="#about" class="hover:text-emerald-400 transition">ჩვენ შესახებ</a>
-                <a href="#rooms" class="hover:text-emerald-400 transition">ნომრები</a>
-                <a href="#experience" class="hover:text-emerald-400 transition">გამოცდილება</a>
-                <a href="#facilities" class="hover:text-emerald-400 transition">სერვისები</a>
-                <a href="#contact" class="hover:text-emerald-400 transition">კონტაქტი</a>
+            <a href="#" class="text-2xl font-black tracking-[0.2em] text-emerald-400 neon-glow hover:scale-105 transition transform duration-300">
+                EMERALD
+            </a>
+            
+            <!-- მენიუს ლინკები (ტექსტები იცვლება დინამიურად ატრიბუტით data-key) -->
+            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest text-gray-400 font-medium">
+                <a href="#" data-key="nav_home" class="hover:text-emerald-400 transition-all duration-300 relative pb-1">მთავარი</a>
+                <a href="#about" data-key="nav_about" class="hover:text-emerald-400 transition-all duration-300 relative pb-1">ჩვენ შესახებ</a>
+                <a href="#rooms" data-key="nav_rooms" class="hover:text-emerald-400 transition-all duration-300 relative pb-1">ნომრები</a>
+                <a href="#experience" data-key="nav_experience" class="hover:text-emerald-400 transition-all duration-300 relative pb-1">გამოცდილება</a>
+                <a href="#facilities" data-key="nav_facilities" class="hover:text-emerald-400 transition-all duration-300 relative pb-1">სერვისები</a>
+                <a href="#contact" data-key="nav_contact" class="hover:text-emerald-400 transition-all duration-300 relative pb-1">კონტაქტი</a>
             </div>
-            <a href="#rooms"
-                class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs uppercase tracking-widest px-5 py-2.5 rounded transition">დაჯავშნა</a>
+            
+            <!-- მარჯვენა მხარე: ენები + დაჯავშნის ღილაკი -->
+            <div class="flex items-center space-x-6">
+                <!-- ენების გადამრთველი (Custom Dropdown) -->
+                <div class="relative inline-block text-left group">
+                    <button id="langBtn" class="flex items-center space-x-2 border border-emerald-500/20 bg-[#0a0e1a] hover:border-emerald-400 px-3 py-1.5 rounded-lg text-xs font-bold tracking-widest text-emerald-400 transition duration-300">
+                        <span>GE</span>
+                        <span>▼</span>
+                    </button>
+                    <!-- ჩამოსაშლელი მენიუ ჰოვერზე -->
+                    <div class="absolute right-0 mt-2 w-24 bg-[#0a0e1a] border border-gray-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden">
+                        <button onclick="changeLanguage('ka')" class="w-full text-left px-4 py-2 text-xs font-bold text-gray-400 hover:bg-emerald-600 hover:text-white transition">GE</button>
+                        <button onclick="changeLanguage('en')" class="w-full text-left px-4 py-2 text-xs font-bold text-gray-400 hover:bg-emerald-600 hover:text-white transition">EN</button>
+                        <button onclick="changeLanguage('ru')" class="w-full text-left px-4 py-2 text-xs font-bold text-gray-400 hover:bg-emerald-600 hover:text-white transition">RU</button>
+                    </div>
+                </div>
+
+                <a href="#rooms" data-key="btn_book" class="relative group overflow-hidden bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-widest px-6 py-3 rounded shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300">
+                    <span class="relative z-10">დაჯავშნა</span>
+                    <span class="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:left-full transition-all duration-1000"></span>
+                </a>
+            </div>
         </div>
     </nav>
 
     <!-- მთავარი სექცია (Hero Section) -->
-    <header class="hero-bg h-[90vh] flex items-center justify-center text-center px-4">
-        <div class="max-w-3xl">
-            <span class="text-emerald-400 text-xs uppercase tracking-[0.3em] block mb-4">კეთილი იყოს თქვენი მობრძანება
-                EMERALD-ში</span>
-            <h1 class="text-4xl md:text-6xl font-light tracking-tight mb-6 leading-tight">
-                ლუქს კლასის ცხოვრება, <br><span class="font-bold text-emerald-400">ერთ ჯავშანში</span>
+    <header class="hero-bg h-[95vh] flex items-center justify-center text-center px-4 relative overflow-hidden">
+        <div class="max-w-4xl relative z-10" data-aos="zoom-out" data-aos-duration="1500">
+            <span data-key="hero_welcome" class="text-emerald-400 text-xs uppercase tracking-[0.4em] block mb-6 font-bold bg-emerald-500/10 py-2 px-4 rounded-full w-max mx-auto border border-emerald-500/20 backdrop-blur-sm">
+                კეთილი იყოს თქვენი მობრძანება EMERALD-ში
+            </span>
+            <h1 class="text-5xl md:text-8xl font-extralight tracking-tight mb-8 leading-tight">
+                <span data-key="hero_title_1">ლუქს კლასის ცხოვრება,</span> <br>
+                <span data-key="hero_title_2" class="font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-green-500 neon-glow">
+                    ერთ ჯავშანში
+                </span>
             </h1>
-            <p class="text-gray-400 text-sm md:text-base max-w-xl mx-auto mb-8 font-light">
+            <p data-key="hero_desc" class="text-gray-400 text-base md:text-xl max-w-2xl mx-auto mb-12 font-light leading-relaxed">
                 აღმოაჩინე დაუვიწყარი დასვენება, უგემრიელესი რესტორანი, ღია აუზი და უმაღლესი დონის გასართობი სივრცეები.
             </p>
-            <a href="#rooms"
-                class="border border-emerald-400 text-emerald-400 hover:bg-emerald-400 hover:text-[#0b0f19] px-8 py-3.5 text-xs uppercase tracking-widest transition duration-300">
-                აღმოაჩინე ახლა
+            <a href="#rooms" data-key="hero_btn" class="relative inline-flex items-center justify-center px-10 py-5 overflow-hidden font-bold text-xs uppercase tracking-widest text-emerald-400 border-2 border-emerald-400 rounded-lg group transition duration-300 hover:text-[#05070f] shadow-[0_0_40px_rgba(52,211,153,0.3)]">
+                <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-emerald-400 rounded-full group-hover:w-full group-hover:h-56"></span>
+                <span class="relative z-10">აღმოაჩინე ახლა</span>
             </a>
         </div>
     </header>
 
     <!-- ჩვენ შესახებ (About Section) -->
-    <section id="about" class="py-24 max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-        <div>
-            <span class="text-emerald-400 text-xs uppercase tracking-widest block mb-2">სასტუმრო ემერალდი</span>
-            <h2 class="text-3xl font-bold mb-6 tracking-tight">უმაღლესი დონის კომფორტი და დასვენება</h2>
-            <p class="text-gray-400 leading-relaxed mb-6 font-light">
-                სასტუმრო Emerald გთავაზობთ სრულყოფილ ეკოსისტემას თქვენი განტვირთვისთვის. ჩვენთან დაგხვდებათ პრემიუმ
-                კლასის ნომრები, დახვეწილი რესტორანი ქართული და ევროპული სამზარეულოთი, და თანამედროვე სპორტულ-გასართობი
-                ზონები.
-            </p>
-            <p class="text-gray-400 leading-relaxed mb-8 font-light">
-                მიირთვით უგემრიელესი კერძები, დაკავდით სპორტით ჩვენს სატრენაჟორო დარბაზში ან განიტვირთეთ მეგობრებთან
-                ერთად ბილიარდისა და მაგიდის ჩოგბურთის თამაშით.
-            </p>
+    <section id="about" class="py-32 max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+        <div data-aos="fade-right" data-aos-duration="1000">
+            <span data-key="about_badge" class="text-emerald-400 text-xs uppercase tracking-[0.3em] font-bold block mb-3">სასტუმრო ემერალდი</span>
+            <h2 data-key="about_title" class="text-4xl md:text-5xl font-extrabold mb-8 tracking-tight text-white leading-tight">
+                უმაღლესი დონის კომფორტი და დასვენება
+            </h2>
+            <div class="space-y-6 text-gray-400 leading-relaxed text-base font-light">
+                <p data-key="about_p1" class="border-l-2 border-emerald-500 pl-4 bg-emerald-500/5 py-2 rounded-r-lg">
+                    სასტუმრო Emerald გთავაზობთ სრულყოფილ ეკოსისტემას თქვენი განტვირთვისთვის. ჩვენთან დაგხვდებათ პრემიუმ კლასის ნომრები, დახვეწილი რესტორანი ქართული და ევროპული სამზარეულოთი.
+                </p>
+                <p data-key="about_p2">
+                    მიირთვით უგემრიელესი კერძები, დაკავდით სპორტით ჩვენს სატრენაჟორო დარბაზში ან განიტვირთეთ მეგობრებთან ერთად ბილიარდისა და მაგიდის ჩოგბურთის თამაშით.
+                </p>
+            </div>
         </div>
-        <div class="grid grid-cols-2 gap-4">
-            <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=600" class="rounded shadow-xl"
-                alt="Interior">
-            <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600"
-                class="rounded shadow-xl mt-8" alt="Pool">
+        <div class="grid grid-cols-2 gap-6" data-aos="fade-left" data-aos-duration="1000">
+            <div class="overflow-hidden rounded-2xl group"><img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=600" class="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-2 transition duration-700" alt="Interior"></div>
+            <div class="overflow-hidden rounded-2xl group mt-12"><img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600" class="w-full h-full object-cover group-hover:scale-110 group-hover:-rotate-2 transition duration-700" alt="Pool"></div>
         </div>
     </section>
 
     <!-- ნომრები (Rooms Section) -->
-    <section id="rooms" class="py-24 bg-[#0e1422]">
+    <section id="rooms" class="py-32 bg-[#0a0e1a] border-y border-emerald-500/5">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-emerald-400 text-xs uppercase tracking-widest block mb-2">ექსკლუზიური
-                    შემოთავაზება</span>
-                <h2 class="text-3xl font-bold tracking-tight">ნომრები და ლუქსები</h2>
+            <div class="text-center mb-20" data-aos="fade-up">
+                <span data-key="rooms_badge" class="text-emerald-400 text-xs uppercase tracking-[0.3em] block mb-3 font-bold">ექსკლუზიური შემოთავაზება</span>
+                <h2 data-key="rooms_title" class="text-4xl md:text-5xl font-black tracking-tight text-white">ნომრები და ლუქსები</h2>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-3 gap-10">
                 <!-- ბარათი 1 -->
-                <div
-                    class="bg-[#0b0f19] border border-gray-800 rounded overflow-hidden group hover:border-emerald-500/50 transition duration-300">
-                    <div class="overflow-hidden h-64">
-                        <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=600"
-                            class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Room">
+                <div class="bg-[#05070f] border border-gray-900 rounded-3xl overflow-hidden group hover:border-emerald-500/40 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] transform hover:-translate-y-3" data-aos="fade-up" data-aos-delay="100">
+                    <div class="overflow-hidden h-72 relative">
+                        <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=600" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Room">
+                        <span class="absolute top-4 right-4 bg-[#05070f]/90 backdrop-blur-md text-emerald-400 font-bold px-4 py-2 rounded-full text-sm border border-emerald-500/20"><span data-key="room1_price">$220</span> <span data-key="room_night">/ღამე</span></span>
                     </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-xl font-medium">სამეფო საფირონის ლუქსი</h3>
-                            <span class="text-emerald-400 font-bold">$220<span
-                                    class="text-xs text-gray-500 font-light">/ღამე</span></span>
-                        </div>
-                        <p class="text-gray-500 text-xs mb-4">45 კვ.მ • 2 სტუმარი • 1 დიდი საწოლი</p>
-                        <a href="#"
-                            class="block text-center border border-gray-800 hover:border-emerald-400 text-sm py-2.5 transition">ნახვა</a>
+                    <div class="p-8">
+                        <h3 data-key="room1_name" class="text-2xl font-bold mb-3 group-hover:text-emerald-400 transition">სამეფო საფირონის ლუქსი</h3>
+                        <p data-key="room1_details" class="text-gray-500 text-sm mb-6">✨ 45 კვ.მ • 2 სტუმარი • 1 დიდი საწოლი</p>
+                        <a href="#" data-key="room_btn" class="block text-center w-full bg-[#0a0e1a] hover:bg-emerald-600 border border-emerald-500/20 hover:border-emerald-500 text-white font-bold text-sm py-4 rounded-xl transition duration-300">ნახვა და დაჯავშნა</a>
                     </div>
                 </div>
-
                 <!-- ბარათი 2 -->
-                <div
-                    class="bg-[#0b0f19] border border-gray-800 rounded overflow-hidden group hover:border-emerald-500/50 transition duration-300">
-                    <div class="overflow-hidden h-64">
-                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=600"
-                            class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Room">
+                <div class="bg-[#05070f] border border-gray-900 rounded-3xl overflow-hidden group hover:border-emerald-500/40 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] transform hover:-translate-y-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="overflow-hidden h-72 relative">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=600" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Room">
+                        <span class="absolute top-4 right-4 bg-[#05070f]/90 backdrop-blur-md text-emerald-400 font-bold px-4 py-2 rounded-full text-sm border border-emerald-500/20"><span data-key="room2_price">$330</span> <span data-key="room_night">/ღამე</span></span>
                     </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-xl font-medium">ოქროს ჰორიზონტი</h3>
-                            <span class="text-emerald-400 font-bold">$330<span
-                                    class="text-xs text-gray-500 font-light">/ღამე</span></span>
-                        </div>
-                        <p class="text-gray-500 text-xs mb-4">60 კვ.მ • 3 სტუმარი • 1 დიდი საწოლი</p>
-                        <a href="#"
-                            class="block text-center border border-gray-800 hover:border-emerald-400 text-sm py-2.5 transition">ნახვა</a>
+                    <div class="p-8">
+                        <h3 data-key="room2_name" class="text-2xl font-bold mb-3 group-hover:text-emerald-400 transition">ოქროს ჰორიზონტი</h3>
+                        <p data-key="room2_details" class="text-gray-500 text-sm mb-6">✨ 60 კვ.მ • 3 სტუმარი • 1 დიდი საწოლი</p>
+                        <a href="#" data-key="room_btn" class="block text-center w-full bg-[#0a0e1a] hover:bg-emerald-600 border border-emerald-500/20 hover:border-emerald-500 text-white font-bold text-sm py-4 rounded-xl transition duration-300">ნახვა და დაჯავშნა</a>
                     </div>
                 </div>
-
                 <!-- ბარათი 3 -->
-                <div
-                    class="bg-[#0b0f19] border border-gray-800 rounded overflow-hidden group hover:border-emerald-500/50 transition duration-300">
-                    <div class="overflow-hidden h-64">
-                        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=600"
-                            class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Room">
+                <div class="bg-[#05070f] border border-gray-900 rounded-3xl overflow-hidden group hover:border-emerald-500/40 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] transform hover:-translate-y-3" data-aos="fade-up" data-aos-delay="300">
+                    <div class="overflow-hidden h-72 relative">
+                        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=600" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Room">
+                        <span class="absolute top-4 right-4 bg-[#05070f]/90 backdrop-blur-md text-emerald-400 font-bold px-4 py-2 rounded-full text-sm border border-emerald-500/20"><span data-key="room3_price">$250</span> <span data-key="room_night">/ღამე</span></span>
                     </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-xl font-medium">მარგალიტის ორქიდეა</h3>
-                            <span class="text-emerald-400 font-bold">$250<span
-                                    class="text-xs text-gray-500 font-light">/ღამე</span></span>
-                        </div>
-                        <p class="text-gray-500 text-xs mb-4">50 კვ.მ • 2 სტუმარი • 1 დიდი საწოლი</p>
-                        <a href="#"
-                            class="block text-center border border-gray-800 hover:border-emerald-400 text-sm py-2.5 transition">ნახვა</a>
+                    <div class="p-8">
+                        <h3 data-key="room3_name" class="text-2xl font-bold mb-3 group-hover:text-emerald-400 transition">მარგალიტის ორქიდეა</h3>
+                        <p data-key="room3_details" class="text-gray-500 text-sm mb-6">✨ 50 კვ.მ • 2 სტუმარი • 1 დიდი საწოლი</p>
+                        <a href="#" data-key="room_btn" class="block text-center w-full bg-[#0a0e1a] hover:bg-emerald-600 border border-emerald-500/20 hover:border-emerald-500 text-white font-bold text-sm py-4 rounded-xl transition duration-300">ნახვა და დაჯავშნა</a>
                     </div>
                 </div>
             </div>
@@ -155,40 +175,41 @@
     </section>
 
     <!-- სივრცეები (Experience Section) -->
-    <section id="experience" class="py-24 max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
-            <span class="text-emerald-400 text-xs uppercase tracking-widest block mb-2">აღმოაჩინე მეტი</span>
-            <h2 class="text-3xl font-bold tracking-tight">სასტუმროს სივრცეები</h2>
+    <section id="experience" class="py-32 max-w-7xl mx-auto px-6 overflow-hidden">
+        <div class="text-center mb-24" data-aos="zoom-in">
+            <span data-key="exp_badge" class="text-emerald-400 text-xs uppercase tracking-[0.3em] block mb-3 font-bold">აღმოაჩინე მეტი</span>
+            <h2 data-key="exp_title" class="text-4xl md:text-5xl font-black tracking-tight">სასტუმროს სივრცეები</h2>
         </div>
 
-        <div class="space-y-20">
+        <div class="space-y-32">
             <!-- რესტორანი -->
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="overflow-hidden rounded-lg h-80 shadow-2xl">
-                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800"
-                        class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Restaurant">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="overflow-hidden rounded-3xl h-[400px] shadow-2xl group" data-aos="fade-right" data-aos-duration="1200">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Restaurant">
                 </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-emerald-400 mb-4">რესტორანი & ბარი</h3>
-                    <p class="text-gray-400 font-light leading-relaxed">
-                        ჩვენი პრემიუმ კლასის რესტორანი გთავაზობთ დაუვიწყარ გასტრონომიულ მოგზაურობას. საუკეთესო
-                        შეფ-მზარეულები თქვენთვის მოამზადებენ როგორც ავთენტურ ქართულ, ისე დახვეწილ ევროპულ კერძებს,
-                        უმაღლესი ხარისხის ადგილობრივი პროდუქტებით.
+                <div data-aos="fade-left" data-aos-duration="1200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-4xl">🍽️</span>
+                        <h3 data-key="exp_rest_title" class="text-3xl font-extrabold text-emerald-400">რესტორანი & ბარი</h3>
+                    </div>
+                    <p data-key="exp_rest_desc" class="text-gray-400 font-light leading-relaxed text-lg">
+                        ჩვენი პრემიუმ კლასის რესტორანი გთავაზობთ დაუვიწყარ გასტრონომიულ მოგზაურობას. საუკეთესო შეფ-მზარეულები თქვენთვის მოამზადებენ როგორც ავთენტურ ქართულ, ისე დახვეწილ ევროპულ კერძებს.
                     </p>
                 </div>
             </div>
 
-            <!-- სატრენაჟორო დარბაზი -->
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="md:order-last overflow-hidden rounded-lg h-80 shadow-2xl">
-                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800"
-                        class="w-full h-full object-cover hover:scale-105 transition duration-500" alt="Gym">
+            <!-- სპორტ დარბაზი -->
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="md:order-last overflow-hidden rounded-3xl h-[400px] shadow-2xl group" data-aos="fade-left" data-aos-duration="1200">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Gym">
                 </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-emerald-400 mb-4">სავარჯიშო დარბაზი</h3>
-                    <p class="text-gray-400 font-light leading-relaxed">
-                        არ დაარღვიოთ თქვენი ყოველდღიური სპორტული რეჟიმი. ჩვენი სატრენაჟორო დარბაზი აღჭურვილია უახლესი
-                        თაობის კარდიო და ძალისმიერი ტრენაჟორებით, რაც სრულყოფილ პირობებს ქმნის ეფექტური ვარჯიშისთვის.
+                <div data-aos="fade-right" data-aos-duration="1200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-4xl">💪</span>
+                        <h3 data-key="exp_gym_title" class="text-3xl font-extrabold text-emerald-400">სავარჯიშო დარბაზი</h3>
+                    </div>
+                    <p data-key="exp_gym_desc" class="text-gray-400 font-light leading-relaxed text-lg">
+                        არ დაარღვიოთ თქვენი ყოველდღიური სპორტული რეჟიმი. ჩვენი სატრენაჟორო დარბაზი აღჭურვილია უახლესი თაობის კარდიო და ძალისმიერი ტრენაჟორებით.
                     </p>
                 </div>
             </div>
@@ -196,37 +217,112 @@
     </section>
 
     <!-- სერვისები (Facilities) -->
-    <section id="facilities" class="py-24 bg-[#0e1422]">
+    <section id="facilities" class="py-32 bg-[#0a0e1a] border-t border-emerald-500/5">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-emerald-400 text-xs uppercase tracking-widest block mb-2">რას გთავაზობთ</span>
-                <h2 class="text-3xl font-bold tracking-tight">სასტუმროს სერვისები</h2>
+            <div class="text-center mb-20" data-aos="fade-up">
+                <span data-key="fac_badge" class="text-emerald-400 text-xs uppercase tracking-[0.3em] block mb-3 font-bold">რას გთავაზობთ</span>
+                <h2 data-key="fac_title" class="text-4xl md:text-5xl font-black tracking-tight">სასტუმროს სერვისები</h2>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div class="p-8 bg-[#0b0f19] border border-gray-800 rounded">
-                    <div class="text-3xl text-emerald-400 mb-4">🍽️</div>
-                    <h3 class="font-medium text-sm uppercase tracking-wider">რესტორანი</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+                <div class="p-10 bg-[#05070f] border border-gray-900 rounded-2xl group hover:border-emerald-400 transition duration-300" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="text-5xl mb-6 transform group-hover:scale-125 group-hover:rotate-12 transition inline-block">🍽️</div>
+                    <h3 data-key="fac_item1" class="font-bold text-base uppercase tracking-widest text-white group-hover:text-emerald-400 transition">პრემიუმ რესტორანი</h3>
                 </div>
-                <div class="p-8 bg-[#0b0f19] border border-gray-800 rounded">
-                    <div class="text-3xl text-emerald-400 mb-4">🏊‍♂️</div>
-                    <h3 class="font-medium text-sm uppercase tracking-wider">ღია აუზი</h3>
+                <div class="p-10 bg-[#05070f] border border-gray-900 rounded-2xl group hover:border-emerald-400 transition duration-300" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="text-5xl mb-6 transform group-hover:scale-125 group-hover:-rotate-12 transition inline-block">🏊‍♂️</div>
+                    <h3 data-key="fac_item2" class="font-bold text-base uppercase tracking-widest text-white group-hover:text-emerald-400 transition">ღია აუზი</h3>
                 </div>
-                <div class="p-8 bg-[#0b0f19] border border-gray-800 rounded">
-                    <div class="text-3xl text-emerald-400 mb-4">💪</div>
-                    <h3 class="font-medium text-sm uppercase tracking-wider">სპორტ დარბაზი</h3>
+                <div class="p-10 bg-[#05070f] border border-gray-900 rounded-2xl group hover:border-emerald-400 transition duration-300" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="text-5xl mb-6 transform group-hover:scale-125 group-hover:rotate-12 transition inline-block">💪</div>
+                    <h3 data-key="fac_item3" class="font-bold text-base uppercase tracking-widest text-white group-hover:text-emerald-400 transition">სპორტ დარბაზი</h3>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ფუტერი (Footer) -->
-    <footer id="contact" class="bg-[#05070f] border-t border-gray-950 py-12 text-center text-gray-500 text-sm">
-        <p class="text-emerald-400 font-bold tracking-widest text-lg mb-4">EMERALD</p>
-        <p class="mb-6 font-light">აღმოაჩინე შეუდარებელი ელეგანტურობა, სადაც თითოეული დეტალი განსაკუთრებულია.</p>
-        <p>&copy; 2026 Emerald Hotel. ყველა უფლება დაცულია.</p>
+    <footer id="contact" class="bg-[#03040a] border-t border-emerald-500/10 py-16 text-center text-gray-500 text-sm">
+        <p class="text-emerald-400 font-black tracking-[0.3em] text-3xl mb-6 neon-glow">EMERALD</p>
+        <p data-key="footer_desc" class="mb-8 font-light max-w-xl mx-auto text-gray-400 text-base leading-relaxed">
+            აღმოაჩინე შეუდარებელი ელეგანტურობა, სადაც თითოეული დეტალი განსაკუთრებულია.
+        </p>
+        <p class="text-xs tracking-widest text-gray-600">&copy; 2026 Emerald Hotel. All rights reserved.</p>
     </footer>
 
+    <!-- AOS სკრიპტი -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- ენების მართვის JavaScript ლოგიკა -->
+    <script>
+        // ენების ბაზა (თარგმანები)
+        const translations = {
+            ka: {
+                nav_home: "მთავარი", nav_about: "ჩვენ შესახებ", nav_rooms: "ნომრები", nav_experience: "გამოცდილება", nav_facilities: "სერვისები", nav_contact: "კონტაქტი", btn_book: "დაჯავშნა",
+                hero_welcome: "კეთილი იყოს თქვენი მობრძანება EMERALD-ში", hero_title_1: "ლუქს კლასის ცხოვრება,", hero_title_2: "ერთ ჯავშანში", hero_desc: "აღმოაჩინე დაუვიწყარი დასვენება, უგემრიელესი რესტორანი, ღია აუზი და უმაღლესი დონის გასართობი სივრცეები.", hero_btn: "აღმოაჩინე ახლა",
+                about_badge: "სასტუმრო ემერალდი", about_title: "უმაღლესი დონის კომფორტი და დასვენება", about_p1: "სასტუმრო Emerald გთავაზობთ სრულყოფილ ეკოსისტემას თქვენი განტვირთვისთვის. ჩვენთან დაგხვდებათ პრემიუმ კლასის ნომრები, დახვეწილი რესტორანი ქართული და ევროპული სამზარეულოთი.", about_p2: "მიირთვით უგემრიელესი კერძები, დაკავდით სპორტით ჩვენს სატრენაჟორო დარბაზში ან განიტვირთეთ მეგობრებთან ერთად ბილიარდისა და მაგიდის ჩოგბურთის თამაშით.",
+                rooms_badge: "ექსკლუზიური შემოთავაზება", rooms_title: "ნომრები და ლუქსები", room_night: "/ღამე", room_btn: "ნახვა და დაჯავშნა",
+                room1_name: "სამეფო საფირონის ლუქსი", room1_details: "✨ 45 კვ.მ • 2 სტუმარი • 1 დიდი საწოლი", room1_price: "$220",
+                room2_name: "ოქროს ჰორიზონტი", room2_details: "✨ 60 კვ.მ • 3 სტუმარი • 1 დიდი საწოლი", room2_price: "$330",
+                room3_name: "მარგალიტის ორქიდეა", room3_details: "✨ 50 კვ.მ • 2 სტუმარი • 1 დიდი საწოლი", room3_price: "$250",
+                exp_badge: "აღმოაჩინე მეტი", exp_title: "სასტუმროს სივრცეები", exp_rest_title: "რესტორანი & ბარი", exp_rest_desc: "ჩვენი პრემიუმ კლასის რესტორანი გთავაზობთ დაუვიწყარ გასტრონომიულ მოგზაურობას. საუკეთესო შეფ-მზარეულები თქვენთვის მოამზადებენ როგორც ავთენტურ ქართულ, ისე დახვეწილ ევროპულ კერძებს.", exp_gym_title: "სავარჯიშო დარბაზი", exp_gym_desc: "არ დაარღვიოთ თქვენი ყოველდღიური სპორტული რეჟიმი. ჩვენი სატრენაჟორო დარბაზი აღჭურვილია უახლესი თაობის კარდიო და ძალისმიერი ტრენაჟორებით.",
+                fac_badge: "რას გთავაზობთ", fac_title: "სასტუმროს სერვისები", fac_item1: "პრემიუმ რესტორანი", fac_item2: "ღია აუზი", fac_item3: "სპორტ დარბაზი",
+                footer_desc: "აღმოაჩინე შეუდარებელი ელეგანტურობა, სადაც თითოეული დეტალი განსაკუთრებულია."
+            },
+            en: {
+                nav_home: "Home", nav_about: "About Us", nav_rooms: "Rooms", nav_experience: "Experience", nav_facilities: "Services", nav_contact: "Contact", btn_book: "Book Now",
+                hero_welcome: "Welcome to EMERALD", hero_title_1: "Luxury Living,", hero_title_2: "In One Booking", hero_desc: "Discover an unforgettable vacation, fine dining, an outdoor pool, and premium entertainment spaces.", hero_btn: "Discover Now",
+                about_badge: "Emerald Hotel", about_title: "Premium Comfort and Relaxation", about_p1: "Hotel Emerald offers the perfect ecosystem for your relaxation. Here you will find premium rooms and a sophisticated restaurant with Georgian and European cuisine.", about_p2: "Enjoy delicious dishes, stay active in our gym, or unwind with friends playing billiards and table tennis.",
+                rooms_badge: "Exclusive Offers", rooms_title: "Rooms & Suites", room_night: "/Night", room_btn: "View & Book",
+                room1_name: "Royal Sapphire Suite", room1_details: "✨ 45 sq.m • 2 Guests • 1 King Bed", room1_price: "$220",
+                room2_name: "Golden Horizon", room2_details: "✨ 60 sq.m • 3 Guests • 1 King Bed", room2_price: "$330",
+                room3_name: "Pearl Orchid", room3_details: "✨ 50 sq.m • 2 Guests • 1 King Bed", room3_price: "$250",
+                exp_badge: "Discover More", exp_title: "Hotel Spaces", exp_rest_title: "Restaurant & Bar", exp_rest_desc: "Our premium restaurant offers an unforgettable culinary journey. Top chefs prepare authentic Georgian and refined European dishes using the highest quality local products.", exp_gym_title: "Fitness Center", exp_gym_desc: "Don't break your daily workout routine. Our gym is equipped with the latest generation of cardio and strength training equipment.",
+                fac_badge: "What We Offer", fac_title: "Hotel Facilities", fac_item1: "Premium Dining", fac_item2: "Outdoor Pool", fac_item3: "Fitness Gym",
+                footer_desc: "Discover unparalleled elegance, where every single detail is extraordinary."
+            },
+            ru: {
+                nav_home: "Главная", nav_about: "О нас", nav_rooms: "Номера", nav_experience: "Впечатления", nav_facilities: "Услуги", nav_contact: "Контакты", btn_book: "Бронь",
+                hero_welcome: "Добро пожаловать в EMERALD", hero_title_1: "Люксовая жизнь,", hero_title_2: "в один клик", hero_desc: "Откройте для себя незабываемый отдых, изысканный ресторан, открытый бассейн и развлекательные зоны высшего уровня.", hero_btn: "Узнать больше",
+                about_badge: "Отель Эмеральд", about_title: "Высший уровень комфорта и отдыха", about_p1: "Отель Emerald предлагает идеальную экосистему для вашего расслабления. Вас ждут номера премиум-класса и изысканный ресторан грузинской и европейской кухни.", about_p2: "Наслаждайтесь вкусными блюдами, тренируйтесь в нашем тренажерном зале или отдыхайте с друзьями за игрой в бильярд и настольный теннис.",
+                rooms_badge: "Эксклюзивное предложение", rooms_title: "Номера и Люксы", room_night: "/Ночь", room_btn: "Смотреть и бронировать",
+                room1_name: "Королевский Сапфир Люкс", room1_details: "✨ 45 кв.м • 2 Гостя • 1 Большая кровать", room1_price: "$220",
+                room2_name: "Золотой Горизонт", room2_details: "✨ 60 кв.м • 3 Гостя • 1 Большая кровать", room2_price: "$330",
+                room3_name: "Жемчужная Орхидея", room3_details: "✨ 50 кв.м • 2 Гостя • 1 Большая кровать", room3_price: "$250",
+                exp_badge: "Узнать больше", exp_title: "Пространства отеля", exp_rest_title: "Ресторан и Бар", exp_rest_desc: "Наш премиум-ресторан предлагает незабываемое гастрономическое путешествие. Лучшие шеф-повара приготовят для вас аутентичные грузинские и изысканные европейские блюда.", exp_gym_title: "Тренажерный зал", exp_gym_desc: "Не нарушайте свой ежедневный спортивный режим. Наш зал оснащен новейшим поколением кардио и силовых тренажеров.",
+                fac_badge: "Что мы предлагаем", fac_title: "Услуги отеля", fac_item1: "Премиум Ресторан", fac_item2: "Открытый Бассейн", fac_item3: "Фитнес Зал",
+                footer_desc: "Откройте для себя непревзойденную элегантность, где каждая деталь особенна."
+            }
+        };
+
+        // ენის შეცვლის ფუნქცია
+        function changeLanguage(lang) {
+            // ვპოულობთ ყველა ელემენტს, რომელსაც აქვს ატრიბუტი data-key
+            const elements = document.querySelectorAll('[data-key]');
+            
+            elements.forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            // კნოპკაზე ტექსტის შეცვლა (ზედა პანელში)
+            document.getElementById('langBtn').firstElementChild.innerText = lang.toUpperCase();
+            
+            // html თეგი "lang" ატრიბუტის განახლება სეოსთვის
+            document.documentElement.lang = lang;
+
+            // ანიმაციების თავიდან გაშვება, რომ ახალ ტექსტებზეც იმუშაოს
+            AOS.refresh();
+        }
+
+        // AOS ინიციალიზაცია
+        AOS.init({
+            once: false,
+            mirror: true
+        });
+    </script>
 </body>
 
 </html>
